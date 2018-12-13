@@ -11,4 +11,4 @@
 * [Computational Statistics](https://github.com/miniii222/study_in_graduate/tree/master/computational%20statistics); 최적화, sampling 등 여러 알고리즘 공부
   * EM algorithm, MCMC, bootstrapping, SIR, IS, GenSA 등
 * 금융공학 (Deep Learning) ; 주로 tensorflow와 keras를 이용한 딥러닝 공부
-* glm ; 다양한 glm 모델 공부
+* [glm](https://github.com/miniii222/study_in_graduate/tree/master/glm) ; 다양한 glm 모델 공부
