@@ -1,0 +1,202 @@
+---
+title: "HW3"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#Ch5
+
+
+###5.14
+```{r}
+grouped <- data.frame(x = 0:2,
+                      Y = c(1,2,4),
+                      N = c(3,2,0))
+grouped
+ungrouped <- data.frame(x = rep(0:2, each = 4),
+                        Y = c(1,0,0,0,1,1,0,0,1,1,1,1))
+ungrouped
+```
+
+#####a
+```{r}
+#grouped data
+grouped_M0 <- glm(cbind(Y,N)~1, data = grouped, family = binomial)
+grouped_M1 <- glm(cbind(Y,N)~x, data = grouped, family = binomial)
+grouped_M0$null.deviance-grouped_M0$deviance #almost zero
+grouped_M1$null.deviance-grouped_M1$deviance
+```
+-2L0 = 0
+
+-2L1 = 5.27238
+
+
+```{r}
+#ungrouped data
+ungrouped_M0 <- glm(Y~1, data = ungrouped, family = binomial)
+ungrouped_M1 <- glm(Y~x, data = ungrouped, family = binomial)
+ungrouped_M0$null.deviance-ungrouped_M0$deviance
+ungrouped_M1$null.deviance-ungrouped_M1$deviance
+```
+
+-2L0 = 0
+
+-2L1 = 5.27238
+
+they do not depend on the form of data entry
+
+
+#####b
+```{r}
+#grouped data
+grouped_M0$deviance
+grouped_M1$deviance
+
+#ungrouped data
+ungrouped_M0$deviance
+ungrouped_M1$deviance
+```
+위에서 출력된 값들은 G^2(M) (이탈도) 이다. 데이터의 형태에 따라 값이 달라지는 것을 알 수 있다. G^2(M) = -2(L_m - L_s) 이라고 정의되는데, a번의 결과와 같이 첫번째항의 경우 데이터의 형태에 관계없이 동일하다.
+
+
+따라서 G^2(M)은 L_s값에 따라 달라진다. 이때, L_s는 saturated model의 Maximized loglikelihood value이다. grouped data와 ungrouped data를 비교해보면 입력되는 x값과 y값이 다르기 때문에, L_s값이 다른 것은 당연하다. 모델의 적합성(goodness of fit)을 검증할 때는 x값이 동일한 경우도 고려한 grouped data를 사용해야 한다.
+
+
+#####c
+```{r}
+#grouped data
+grouped_M0$deviance-grouped_M1$deviance
+
+#ungrouped data
+ungrouped_M0$deviance-ungrouped_M1$deviance
+```
+does not depend on the form of data entry
+
+
+
+###5.20
+```{r}
+alcohol <- data.frame(alc = c(0,0.5,1.5,4,7),
+                      n = c(17114,14502,793,127,38),
+                      mal = c(48,38,5,1,1))
+alcohol
+```
+#####a
+```{r}
+alc1 <- glm(cbind(mal,n)~alc, data = alcohol, family = binomial)
+summary(alc1)
+
+#Deviance
+alc1$deviance
+qchisq(0.95,df=3)
+
+```
+logit(pi)=-5.9625+0.3139*alc
+
+1.930345 < 7.814728 accept H0. 잘 적합된 모형이다.
+
+
+#####b
+```{r}
+#LR test(df = 1)
+alc1$null.deviance - alc1$deviance
+
+qchisq(0.95, df=1)
+```
+4.202854 > 3.841459 reject H0.
+evidence of an alcohol effect(not independent)
+
+
+#####c
+```{r}
+alcohol2 <- data.frame(alc = c(0,0.5,1.5,4,7),
+                      n = c(17114,14502,793,127,37),
+                      mal = c(48,38,5,1,0))
+
+alcohol2
+
+alc2 <- glm(cbind(mal,n)~alc, data = alcohol2, family = binomial)
+#LR test(df = 1)
+alc2$null.deviance - alc2$deviance
+qchisq(0.95, df=1)
+```
+0.8735159 < 3.841459 accept H0.
+
+there is not much evidence of an alcohol effect
+하나의 관측치에 민감하게 반응한다.
+
+
+#####d
+```{r}
+alcohol3 <- data.frame(alc = 1:5,
+                      n = c(17114,14502,793,127,38),
+                      mal = c(48,38,5,1,1))
+alcohol3
+alc3 <- glm(cbind(mal,n)~alc, data = alcohol3, family = binomial)
+summary(alc3)
+
+#LR test(df = 1)
+alc3$null.deviance - alc3$deviance
+qchisq(0.95, df=1)
+```
+
+logit(pi)=-6.2101+0.2267*alc
+
+1.741367 < 3.841459 accept H0.
+there is not much evidence of an alcohol effect.
+불균형한 데이터에서 점수선택에 따라 결과가 달라질 수 있다.
+
+#Ch6
+
+###6.8
+```{r}
+library(VGAM)
+
+lungcancer <- data.frame(
+                therapy = rep(c("Sequential","Alternating"),each=2),
+                gender = rep(c("M","F"),2)
+                      )
+lungcancer<-cbind(lungcancer,
+                  matrix(c(28,4,41,12,45,12,44,7,29,5,20,3,26,2,20,1),ncol=4))
+colnames(lungcancer)<-c("therapy","gender","X1","X2","X3","X4")
+lungcancer
+
+
+```
+
+#####a
+```{r}
+lung1<-vglm(cbind(X1,X2,X3,X4)~therapy+gender, data = lungcancer,
+     family = cumulative(parallel = T))
+summary(lung1)
+```
+logit(P(Y<=j)) = alpha_j - 0.5807(therapy)-0.5414(gender)
+
+gender is fixed - > 순차적 치료군 반응 오즈추정값이 호환치료군 오즈추정값의 exp(-0.5807)=0.5595066배
+
+therapy is fixed -> male 화학요법 반응에 대한 오즈추정값은 female보다 exp(-0.5414) =  0.581933배
+
+
+#####b
+```{r}
+lung2<-vglm(cbind(X1,X2,X3,X4)~therapy*gender, data = lungcancer,
+     family = cumulative(parallel = T))
+summary(lung2)
+```
+logit(P(Y<=j)) = alpha_j - 1.07848(therapy)-0.86461(gender)+0.59041(therapy)*(gender)
+
+
+#####c
+```{r}
+#degree of freedom
+df.residual(lung1)-df.residual(lung2)
+
+#p-value
+1-pchisq(-2*(logLik(lung1)-logLik(lung2)), df = 1)
+
+```
+accept H0. 교호작용을 포함하지 않은 모델이 더 유의한 결과를 보인다.
