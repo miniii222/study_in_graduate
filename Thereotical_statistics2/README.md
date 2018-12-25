@@ -1,4 +1,4 @@
-# Thereotical Statistics2 이론통계학2
+# Thereotical Statistics2 (이론통계학2)
 
 * 매주 새로운 이론을 배우고, 이론을 이용한 분석과제가 매주 주어진다.
 * 이론통계학1과 달리 모든 프로젝트는 팀별로 진행된다.
