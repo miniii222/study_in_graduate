@@ -24,4 +24,7 @@
 
 9. project 9
 
-10. final
+10. [final](https://github.com/miniii222/study_in_graduate/edit/master/Thereotical_statistics2/final_project/)
+    1. 영화수요예측 (project 1)
+    2. 보험이탈예측 (project 7)
+    3. 심장병 발병 확률 예측 (project 9)
