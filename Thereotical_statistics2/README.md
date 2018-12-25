@@ -25,6 +25,6 @@
 9. project 9
 
 10. [final](https://github.com/miniii222/study_in_graduate/edit/master/Thereotical_statistics2/final_project/)
-    1. 영화수요예측 (project 1) - [shiny app link :](https://miniii222.shinyapps.io/movie/)
-    2. 보험이탈예측 (project 7) - [shiny app link :](https://miniii222.shinyapps.io/crmcrm/)
-    3. 심장병 발병 확률 예측 (project 9) - [shiny app link :](https://miniii222.shinyapps.io/heart/)
+    1. 영화수요예측 (project 1) - [shiny app link](https://miniii222.shinyapps.io/movie/)
+    2. 보험이탈예측 (project 7) - [shiny app link](https://miniii222.shinyapps.io/crmcrm/)
+    3. 심장병 발병 확률 예측 (project 9) - [shiny app link](https://miniii222.shinyapps.io/heart/)
