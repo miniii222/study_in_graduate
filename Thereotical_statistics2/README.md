@@ -6,7 +6,15 @@
 * 분석뿐 아니라, 누구나 바로 사용할 수 있는 r shiny app을 만든다.
 * 9개의 분석과제를 진행 후, 마지막 과제는 그동안 만든 shiny app을 보완 및 수정하여 개인별 shiny app 을 3개씩 만든다.
 
-1. project 1
+1. project 1 (신상품 수요예측 / 전염병 확산 모형)
+- 시간별 수요데이터 혹은 환자수 데이터를 이용하여 분포를 가정하고, 다음 수요를 예측한다.
+- 가정한 분포는 __Bass model, Logistic model, Gumbel model__
+
+    * <part A> DRAM 분기별 선적자료
+ 
+    * <part B> HIV/AIDS 확산예측
+
+    * <part C> 
 
 2. project 2
 
