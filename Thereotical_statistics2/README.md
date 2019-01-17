@@ -9,7 +9,8 @@
 1. project 1 (신상품 수요예측 / 전염병 확산 모형)
 - 시간별 수요데이터 혹은 환자수 데이터를 이용하여 분포를 가정하고, 다음 수요를 예측한다.
 - 가정한 분포는 __Bass model, Logistic model, Gumbel model__
-![s](C:/Users/wjssm/Desktop/0.graduate/2nd/TS2/project1_models.JPG "1")
+
+![](https://github.com/miniii222/study_in_graduate/blob/master/Thereotical_statistics2/project1/project1_models.JPG "1")
 
     * <part A> DRAM 분기별 선적자료
  
