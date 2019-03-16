@@ -1,3 +1,4 @@
+#2.
 #generate n points p dimensions in the sphere
 myftn <- function(n, p){
   
@@ -20,8 +21,38 @@ myftn <- function(n, p){
 
 
 #2d points in the sphere
-plot(myftn(10000,2))
+plot(myftn(2000,2))
 
 library('scatterplot3d')
 #3d points in the sphere
-scatterplot3d(myftn(10000,3))
+scatterplot3d(myftn(2000,3))
+
+
+#3.
+##Compare 
+my_distance <- function(n, sim.n, p){
+  
+  #n : the number of points
+  #sim.n : the number of simulation
+  #p : dimension
+  
+  dist1 <- rep(NA, n)
+  min1 <- rep(NA, sim.n)
+  
+  for(j in 1:sim.n){
+  
+    for(i in 1:n){
+    dist1[i] <- sqrt(qchisq(runif(1, 0, pchisq(1, df=p)), p))
+    }
+    
+    min1[j] <- min(dist1)
+  }
+  
+  return(median(min1))
+}
+
+n <- 2000; sim.n <- 1000; p<-3
+d_equation <- (1-0.5^(1/n))^(1/p)
+d_equation
+
+my_distance(n, sim.n, p)
