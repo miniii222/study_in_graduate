@@ -93,7 +93,7 @@ for(i in 1:length(k_list)){
 knn_acc
 plot(k_list, knn_acc)
 
-k_list <- 30:40
+k_list <- 25:40
 knn_acc <- rep(0, length(k_list))
 
 for(i in 1:length(k_list)){
@@ -103,9 +103,10 @@ for(i in 1:length(k_list)){
 knn_acc
 plot(k_list, knn_acc)
 
-k = 39
+k = 35
 knn.best <- knn(X_train, X_test, y_train ,k)
 table(knn.best, test$Direction)
+mean(knn.best == test$Direction)
 
 
 #Excercise.11
@@ -164,9 +165,10 @@ mean(qda.pred$class != test$mpg01)
 #(f)
 lr1 <- glm(mpg01~displacement + horsepower+weight+acceleration,
            data = dt, family = binomial)
-lr.pred <- predict(qda1, test)
-table(qda.pred$class, test$mpg01)
-mean(qda.pred$class != test$mpg01)
+lr.proba <- predict(lr1, test, 'response')
+lr.pred <- ifelse(lr.proba >= 0.5,1,0)
+table(lr.pred, test$mpg01)
+mean(lr.pred != test$mpg01)
 
 #(g)
 library(class)
@@ -182,8 +184,9 @@ for(i in 1:length(k_list)){
   knn1 <- knn(train.X, test.X, train.y, k = k_list[i])
   knn_miss[i] <- mean(knn1 != test$mpg01)
 }
+plot(k_list, knn_miss)
 
-k_list <- seq(20,30, by = 1)
+k_list <- 1:15
 knn_miss <- rep(0,length(k_list))
 plot(k_list, knn_miss)
 
@@ -192,3 +195,8 @@ for(i in 1:length(k_list)){
   knn_miss[i] <- mean(knn1 != test$mpg01)
 }
 plot(k_list, knn_miss)
+
+k=5
+knn.best <- knn(train.X, test.X, train.y ,k)
+table(knn.best, test$mpg01)
+mean(knn.best != test$mpg01)
