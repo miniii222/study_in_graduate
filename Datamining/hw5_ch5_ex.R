@@ -59,7 +59,7 @@ lr.err
 
 #(d)
 Default$stu_dummy <- ifelse(Default$student=='Yes',1,0)
-lr.err <- c()
+lr.err <- c(); lr.err2 <- c()
 for(i in 1:3){
   
   train.ind <- sample(nrow(Default),as.integer(nrow(Default)*0.7))
@@ -67,13 +67,19 @@ for(i in 1:3){
   valid  <- Default[-train.ind,]
   
   lr1 <- glm(default~income+balance+stu_dummy, data = train, family = 'binomial')
+  lr2 <- glm(default~income+balance, data = train, family = 'binomial')
   
   lr1.prob <- predict(lr1, valid, 'response')
   lr1.pred <- ifelse(lr1.prob >=0.5, 'Yes',"No" )
   
+  lr2.prob <- predict(lr2, valid, 'response')
+  lr2.pred <- ifelse(lr2.prob >=0.5, 'Yes',"No" )
+  
   lr.err[i] <- mean(lr1.pred != valid$default)
+  lr.err2[i] <- mean(lr2.pred != valid$default)
 }
 lr.err
+lr.err2
 
 ###Exercise7
 data(Weekly)
@@ -127,7 +133,6 @@ for (i in 1:BS){
   bs.mean[i] <- mean(Boston$medv[bs.ind])
   
 }
-
 sd(bs.mean)
 
 #(d)
@@ -137,23 +142,25 @@ sort(bs.mean)[c(0.025*BS+1, 0.975*BS-1)]
 
 #(e)
 median(Boston$medv)
+
 #(f)
+BS <- 100000
 bs.median <- c()
 for (i in 1:BS){
   
   bs.ind <- sample(n, replace = T)
   bs.median[i] <- median(Boston$medv[bs.ind])
 }
-
 sd(bs.median)
+
 #(g)
 quantile((Boston$medv), 0.1)
 
 #(h)
 bs.10 <- c()
+BS <- 100000
 for(i in 1:BS){
   bs.ind <- sample(n, replace = T)
   bs.10[i] <- quantile(Boston$medv[bs.ind], 0.1)
 }
-
 sd(bs.10)
