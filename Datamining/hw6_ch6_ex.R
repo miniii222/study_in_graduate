@@ -89,4 +89,79 @@ r2(pred.pls)
 
 #excercise 6.11
 library(MASS)
-data(Boston)
+data(Boston) #predict crime rate
+
+#(a)
+
+set.seed(100)
+dim(Boston)
+
+#5-fold
+k = 5
+folds <- sample(k, nrow(Boston), replace = TRUE,prob = rep(0.2,k))
+
+#1.linear regression
+cv.err.lr <- c()
+for(i in 1:k){
+  
+  lr <- lm(crim ~., data = Boston[folds != i,])
+  lr.pred <- predict(lr, Boston[folds == i,])
+  cv.err.lr[i] <- rmse(lr.pred, Boston[folds == i, 'crim'])
+}
+
+mean(cv.err.lr)
+
+#2.best subset
+cv.err.bs <- matrix(NA, k, 13, dimnames = list(NULL, paste(1:13)))
+
+for (j in 1:k) {
+  
+  best.fit <- regsubsets(crim ~ ., data = Boston[folds != j, ], nvmax = 13)
+  
+  for(i in 1:13){
+    coefi <- coef(best.fit, id = i)
+    test.mat <- model.matrix(crim~., data = Boston[folds == j, ])
+    best.pred <- test.mat[,names(coefi)] %*% coefi
+    cv.err.bs[j,i] <- rmse(best.pred, Boston[folds == j,'crim'])
+  }
+}
+
+mean.cv.errors <- colMeans(cv.err.bs)
+plot(mean.cv.errors, type = "b", xlab = "Number of variables", ylab = "CV error")
+points(which.min(mean.cv.errors),min(mean.cv.errors), pch = 16)
+which.min(mean.cv.errors)
+
+#3.ridge
+set.seed(100)
+Boston.mat <- model.matrix(crim~., data = Boston)
+cv.ridge <- cv.glmnet(Boston.mat, Boston$crim, alpha = 0,
+                       lambda = grid, thresh = 1e-12)
+bestlam.ridge <- cv.ridge$lambda.min
+bestlam.ridge
+
+#4.lasso
+cv.lasso <- cv.glmnet(Boston.mat, Boston$crim, alpha = 1,
+                      lambda = grid, thresh = 1e-12)
+bestlam.lasso <- cv.lasso$lambda.min
+bestlam.lasso
+
+cv.err.reg <- matrix(NA, nrow = k, ncol = 2)
+
+for(i in 1:k){
+  
+  
+  ridge1 <- glmnet(Boston.mat[folds!=i, ], Boston[folds != i,'crim'],
+                   lambda = bestlam.ridge, thresh = 1e-12,
+                   alpha = 0)
+  lasso1 <- glmnet(Boston.mat[folds!=i, ], Boston[folds != i,'crim'],
+                   lambda = bestlam.lasso, thresh = 1e-12)
+  
+  ridge.pred <- predict(ridge1, newx = Boston.mat[folds==i, ])
+  lasso.pred <- predict(lasso1, newx = Boston.mat[folds==i, ])
+  
+  #ridge cv error
+  cv.err.reg[i,1] <- rmse(ridge.pred, Boston[folds ==i, 'crim'])
+  cv.err.reg[i,2] <- rmse(lasso.pred, Boston[folds ==i, 'crim'])
+}
+
+colMeans(cv.err.reg)
